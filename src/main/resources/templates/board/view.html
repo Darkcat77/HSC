@@ -228,7 +228,7 @@
 				var writer = document.getElementById("modalWriter");
 				var content = document.getElementById("modalContent");
 
-				var uri = /*[[ @{/comments/} ]]*/ null + idx;
+				var uri = /*[[ @{/comments/} ]]*/  + idx;
 				var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "PATCH"};
 				var params = {"idx": idx, "writer": writer.value, "content": content.value};
 
@@ -260,7 +260,7 @@
 					return false;
 				}
 			
-				var uri = /*[[ @{/comments/} ]]*/ null  + idx;
+				var uri = /*[[ @{/comments/} ]]*/  + idx;
 				var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "DELETE"};
 			
 				$.ajax({
