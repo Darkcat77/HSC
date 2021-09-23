@@ -254,6 +254,36 @@
 				});
 			}
 			
+			function deleteComment(idx) {
+
+				if (!confirm('댓글을 삭제하시겠어요?')) {
+					return false;
+				}
+			
+				var uri = /*[[ @{/comments/} ]]*/ null  + idx;
+				var headers = {"Content-Type": "application/json", "X-HTTP-Method-Override": "DELETE"};
+			
+				$.ajax({
+					url: uri,
+					type: "DELETE",
+					headers: headers,
+					dataType: "json",
+					success: function(response) {
+						if (response.result == false) {
+							alert("댓글 삭제에 실패하였습니다.");
+							return false;
+						}
+			
+						printCommentList();
+						$("#commentModal").modal("hide");
+					},
+					error: function(xhr, status, error) {
+						alert("에러가 발생하였습니다.");
+						return false;
+					}
+				});
+			}
+			
 			/*[- end of function -]*/
 
 			/*]]>*/
