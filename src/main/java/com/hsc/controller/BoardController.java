@@ -1,8 +1,16 @@
 package com.hsc.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
@@ -11,8 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hsc.constant.Method;
+import com.hsc.domain.AttachDTO;
 import com.hsc.domain.BoardDTO;
 import com.hsc.service.BoardService;
 import com.hsc.util.UiUtils;
@@ -31,20 +41,27 @@ public class BoardController extends UiUtils{
 			model.addAttribute("board", new BoardDTO());
 		} else {
 			BoardDTO board = boardService.getBoardDetail(idx);
+			
 			if (board == null || "Y".equals(board.getEndYn())) {
 				return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
 			}
 			model.addAttribute("board", board);
+			
+//			파일리스트 가져오기
+			List<AttachDTO> fileList = boardService.getAttachFileList(idx);
+			model.addAttribute("fileList", fileList);
 		}
 
 		return "board/write";
 	}
 	
 	@PostMapping(value = "/board/register.do")
-	public String registerBoard(@ModelAttribute("params") final BoardDTO params,  Model model) {
+	//public String registerBoard(@ModelAttribute("params") final BoardDTO params,  Model model) {
+	public String registerBoard(final BoardDTO params, final MultipartFile[] files, Model model) { //파일처리 추가
 		Map<String, Object> pagingParams = getPagingParams(params);
 		try {
-			boolean isRegistered = boardService.registerBoard(params);
+			//boolean isRegistered = boardService.registerBoard(params);
+			boolean isRegistered = boardService.registerBoard(params, files); //파일처리 추가
 			if (isRegistered == false) {
 				return showMessageWithRedirect("게시글 등록에 실패하였습니다.", "/board/list.do", Method.GET, pagingParams, model);
 			}
@@ -78,6 +95,9 @@ public class BoardController extends UiUtils{
 			return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
 		}
 		model.addAttribute("board", board);
+		
+		List<AttachDTO> fileList = boardService.getAttachFileList(idx); 
+		model.addAttribute("fileList", fileList); 
 
 		return "board/view";
 	}
@@ -102,6 +122,41 @@ public class BoardController extends UiUtils{
 		}
 
 		return showMessageWithRedirect("게시글 삭제가 완료되었습니다.", "/board/list.do", Method.GET, pagingParams, model);
+	}
+	
+	@GetMapping("/board/download.do")
+	public void downloadAttachFile(@RequestParam(value = "idx", required = false) final Long idx, Model model, HttpServletResponse response) {
+
+		if (idx == null) throw new RuntimeException("올바르지 않은 접근입니다.");
+
+		AttachDTO fileInfo = boardService.getAttachDetail(idx);
+		if (fileInfo == null || "Y".equals(fileInfo.getEndYn())) {
+			throw new RuntimeException("파일 정보를 찾을 수 없습니다.");
+		}
+
+		String uploadDate = fileInfo.getRegDate().format(DateTimeFormatter.ofPattern("yyMMdd"));
+		String uploadPath = Paths.get("C:", "dev", "upload", uploadDate).toString();
+
+		String filename = fileInfo.getOriginalName();
+		File file = new File(uploadPath, fileInfo.getSaveName());
+
+		try {
+			byte[] data = FileUtils.readFileToByteArray(file);
+			response.setContentType("application/octet-stream");
+			response.setContentLength(data.length);
+			response.setHeader("Content-Transfer-Encoding", "binary");
+			response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(filename, "UTF-8") + "\";");
+
+			response.getOutputStream().write(data);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+
+		} catch (IOException e) {
+			throw new RuntimeException("파일 다운로드에 실패하였습니다.");
+
+		} catch (Exception e) {
+			throw new RuntimeException("시스템에 문제가 발생하였습니다.");
+		}
 	}
 
 		

@@ -14,7 +14,8 @@
            , uptDate
     </sql>
     
-    <insert id="insertBoard" parameterType="com.hsc.domain.BoardDTO">
+    <!--<insert id="insertBoard" parameterType="BoardDTO">-->
+    <insert id="insertBoard" parameterType="BoardDTO" useGeneratedKeys="true" keyProperty="idx">
       INSERT INTO tbl_event(
              <include refid="boardColumns" />
       ) VALUES (
