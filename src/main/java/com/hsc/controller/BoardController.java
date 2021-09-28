@@ -1,7 +1,9 @@
 package com.hsc.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
@@ -11,12 +13,19 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +38,9 @@ import com.hsc.util.UiUtils;
 
 
 
+
 @Controller
+@PropertySource("classpath:Resource.properties")
 public class BoardController extends UiUtils{
 
 	@Autowired
@@ -158,6 +169,21 @@ public class BoardController extends UiUtils{
 			throw new RuntimeException("시스템에 문제가 발생하였습니다.");
 		}
 	}
+	
+	
+	@Value("${resource.path}")
+	private String resourcePath;
 
+	
+	
+	// feed image 반환하기
+	
+	@GetMapping(value = "image/{imagename}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public ResponseEntity<byte[]> userSearch(@PathVariable("imagename") String imagename) throws IOException {
+		InputStream imageStream = new FileInputStream(resourcePath + imagename);
+		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+		imageStream.close();
+		return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
+	}
 		
 }

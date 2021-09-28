@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.hsc.interceptor.LoggerInterceptor;
 
 @Configuration
-@PropertySource("classpath:Resource.properties")
+//@PropertySource("classpath:Resource.properties")
 public class MvcConfiguration implements WebMvcConfigurer {
 
 	@Override
@@ -29,18 +29,18 @@ public class MvcConfiguration implements WebMvcConfigurer {
 		return multipartResolver;
 	}
 	
-	@Value("${resource.path}")
-	private String resourcePath;
-	
-	@Value("${upload.path}")
-	private String uploadPath;
-	
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler(uploadPath)
-				.addResourceLocations(resourcePath);
-	}
-	
+//	@Value("${resource.path}")
+//	private String resourcePath;
+//	
+//	@Value("${upload.path}")
+//	private String uploadPath;
+//	
+//	@Override
+//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//		registry.addResourceHandler(uploadPath)
+//				.addResourceLocations(resourcePath);
+//	}
+//	
 	
 	
 	
