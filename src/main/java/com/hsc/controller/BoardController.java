@@ -185,5 +185,11 @@ public class BoardController extends UiUtils{
 		imageStream.close();
 		return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
 	}
+	
+	
+	@GetMapping(value = "/board/testImage.do")
+	public String openImage(@ModelAttribute("params") String params, Model model) {
+		return "board/testImage";
+	}
 		
 }

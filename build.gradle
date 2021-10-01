@@ -37,6 +37,8 @@ dependencies {
 	implementation("commons-io:commons-io:2.11.0")
 	// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
 	implementation("commons-fileupload:commons-fileupload:1.4")
+	// https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib
+	implementation("org.imgscalr:imgscalr-lib:4.2")
 }
 
 test {
