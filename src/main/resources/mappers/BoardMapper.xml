@@ -4,12 +4,16 @@
 
     <sql id="boardColumns">
              idx
+           , eType
            , evtNm
            , stDate
            , edDate
            , contents
            , place
-           , endYn
+           , orgImg
+           , savImg
+           , deleteYn
+           , useYn
            , regDate
            , uptDate
     </sql>
@@ -20,11 +24,15 @@
              <include refid="boardColumns" />
       ) VALUES (
         #{idx}
+      , #{eType}  
       , #{evtNm}
       , #{stDate}
       , #{edDate}
       , #{contents}
       , #{place}
+      , #{orgImg}
+      , #{savImg}
+      , 'N'
       , 'N'
       , NOW()
       , NULL 
@@ -46,12 +54,15 @@
     <update id="updateBoard" parameterType="BoardDTO">
         UPDATE tbl_event
         SET
-            evtNm    = #{evtNm}
+            eType    = #{eType}
+          , evtNm    = #{evtNm}
           , stDate   = #{stDate}
           , edDate   = #{edDate}
           , contents = #{contents}
           , place    = #{place}
-          , endYn    = #{endYn}
+          , orgimg   = #{orgimg}
+          , savimg   = #{savimg}
+          , useYn    = #{useYn}
           , uptDate  = NOW()
         WHERE idx    = #{idx}
     </update>
@@ -59,7 +70,7 @@
     <update id="deleteBoard" parameterType="BoardDTO">
         UPDATE tbl_event
         SET
-            endYn  = 'Y'
+            deleteYn  = 'Y'
           , uptDate = NOW()
         WHERE idx = #{idx}
     </update>
@@ -69,7 +80,7 @@
            <include refid="boardColumns" />
         FROM
             tbl_event
-        WHERE endYn='N'
+        WHERE deleteYn='N'
         <include refid="CommonMapper.search" />
         ORDER BY
           idx DESC,
@@ -82,7 +93,7 @@
             COUNT(*)
         FROM
             tbl_event
-        WHERE endYn='N'
+        WHERE deleteYn='N'
         <include refid="CommonMapper.search" />
     </select>
     

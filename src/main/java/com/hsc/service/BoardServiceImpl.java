@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +18,11 @@ import com.hsc.paging.PaginationInfo;
 import com.hsc.util.FileUtils;
 
 @Service
+@PropertySource("classpath:Resource.properties")
 public class BoardServiceImpl implements BoardService {
+	
+	@Value("${evtResource.path}")
+	private String evtPath;
 	
 	@Autowired
 	private BoardMapper boardMapper;
@@ -46,7 +52,6 @@ public class BoardServiceImpl implements BoardService {
 			}
 		}
 		return (queryResult > 0);
-
 	}
 	
 	@Override
@@ -57,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
 			return false;
 		}
 
-		List<AttachDTO> fileList = fileUtils.uploadFiles(files, params.getIdx());
+		List<AttachDTO> fileList = fileUtils.uploadFiles(files, params.getIdx(), evtPath);
 		if (CollectionUtils.isEmpty(fileList) == false) {
 			queryResult = attachMapper.insertAttach(fileList);
 			if (queryResult < 1) {
@@ -65,6 +70,29 @@ public class BoardServiceImpl implements BoardService {
 			}
 		}
 
+		return (queryResult > 0);
+	}
+	
+	@Override
+	public boolean registerEventBoard(BoardDTO params, MultipartFile[] files) {
+		
+		int queryResult = 0;
+		if ("Y".equals(params.getChangeYn())) {
+			List<AttachDTO> fileList = fileUtils.uploadFiles(files, params.getIdx(), evtPath);
+			if (CollectionUtils.isEmpty(fileList) == false) {
+				for(AttachDTO attachDTO : fileList) {
+					if (params.getOrgImg().toString().equals(attachDTO.getOriginalName().toString())){
+						params.setSavImg(attachDTO.getSaveName());
+					}
+				}			
+			}
+		}
+
+		if (params.getIdx() == null) {
+			queryResult = boardMapper.insertBoard(params);
+		} else {
+			queryResult = boardMapper.updateBoard(params);
+		}
 		return (queryResult > 0);
 	}
 
@@ -79,7 +107,7 @@ public class BoardServiceImpl implements BoardService {
 
 		BoardDTO board = boardMapper.selectBoardDetail(idx);
 
-		if (board != null && "N".equals(board.getEndYn())) {
+		if (board != null && "N".equals(board.getDeleteYn())) {
 			queryResult = boardMapper.deleteBoard(idx);
 		}
 

@@ -8,7 +8,7 @@
 		, board_idx
 		, content
 		, writer
-		, endYn
+		, useYn
 		, regDate
 		, uptDate
 	</sql>
@@ -21,7 +21,7 @@
 			, #{boardIdx}
 			, #{content}
 			, #{writer}
-			, IFNULL(#{endYn}, 'N')
+			, IFNULL(#{useYn}, 'N')
 			, NOW()
 			, NULL
 		)
@@ -33,7 +33,7 @@
 		FROM
 			tbl_comment
 		WHERE
-			endYn = 'N'
+			useYn = 'N'
 		AND
 			idx = #{idx}
 	</select>
@@ -51,7 +51,7 @@
 	<update id="deleteComment" parameterType="long">
 		UPDATE tbl_comment
 		SET
-			  endYn = 'Y'
+			  useYn = 'Y'
 			, uptDate = NOW()
 		WHERE
 			idx = #{idx}
@@ -63,7 +63,7 @@
 		FROM
 			tbl_comment
 		WHERE
-			endYn = 'N'
+			useYn = 'N'
 		AND
 			board_idx = #{boardIdx}
 		ORDER BY
@@ -77,7 +77,7 @@
 		FROM
 			tbl_comment
 		WHERE
-			endYn = 'N'
+			useYn = 'N'
 		AND
 			board_idx = #{boardIdx}
 	</select>

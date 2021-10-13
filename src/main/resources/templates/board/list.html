@@ -14,21 +14,37 @@
 				<thead>
 					<tr>
 						<th>번호</th>
-						<th>이벤트명</th>
+						<th>행사구분</th>
+						<th>행사명</th>
 						<th>장소</th>
 						<th>등록일</th>
-						<th>조회 수</th>
+						<th>행사기간</th>
 					</tr>
 				</thead>
 				<tbody>
                     <tr th:if="${not #lists.isEmpty( boardList )}" th:each="row : ${boardList}">
-						<td scope="row" th:text="${#strings.equals( row.endYn, 'Y' ) ? '공지' : row.idx}"></td>
+						<td scope="row" th:text="${#strings.equals( row.useYn, 'Y' ) ? '공지' : row.idx}"></td>
+						
+						<td th:if="${row.eType}=='K'" th:text="킨텍스"></td>
+						<td th:unless="${row.eType}=='K'" th:text="소노캄"></td>
+						<!-- <td th:text="${row.eType}"></td> -->
+						
 						<td class="text-left">
-							<a th:href="|@{/board/view.do}${params.makeQueryString(params.currentPageNo)}&idx=${row.idx}|" th:text="${row.evtNm}"></a>
+							<a th:href="|@{/board/eventview.do}${params.makeQueryString(params.currentPageNo)}&idx=${row.idx}|" th:text="${row.evtNm}"></a>
 						</td>
 						<td th:text="${row.place}"></td>
 						<td th:text="${#temporals.format( row.regDate, 'yyyy-MM-dd' )}"></td>
-						<td th:text="${row.regDate}"></td>
+						<!-- <td th:text="${row.stDate}+'~'+${row.edDate}"></td> -->
+						<td th:text="
+						    ${
+						    	#strings.substring(row.stDate,0,4) +'-'+
+						    	#strings.substring(row.stDate,4,6) +'-'+
+						    	#strings.substring(row.stDate,6,8) +'~'+
+						    	#strings.substring(row.edDate,0,4) +'-'+
+						    	#strings.substring(row.edDate,4,6) +'-'+
+						    	#strings.substring(row.edDate,6,8)
+						    }
+						"></td>
 					</tr>
 					<tr th:unless="${not #lists.isEmpty( boardList )}">
 						<td colspan="5">조회된 결과가 없습니다.</td>
@@ -37,7 +53,7 @@
 			</table>
 
 			<div class="btn_wrap text-right">
-				<a th:href="@{/board/write.do}" class="btn btn-primary waves-effect waves-light">Write</a>
+				<a th:href="@{/board/eventwrite.do}" class="btn btn-primary waves-effect waves-light">Write</a>
 			</div>
               
 			<th:block layout:fragment="paging">

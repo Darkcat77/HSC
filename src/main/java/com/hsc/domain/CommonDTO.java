@@ -15,8 +15,11 @@ public class CommonDTO extends Criteria {
 	/** 페이징 정보 */
 	private PaginationInfo paginationInfo;
 
-	/** 종료 여부 */
-	private String endYn;
+	/** 삭제 여부 */
+	private String deleteYn;
+	
+	/** 사용 여부 */
+	private String useYn;
 
 	/** 등록일 */
 	private LocalDateTime regDate;
