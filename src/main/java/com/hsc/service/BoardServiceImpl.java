@@ -14,6 +14,7 @@ import com.hsc.domain.AttachDTO;
 import com.hsc.domain.BoardDTO;
 import com.hsc.mapper.AttachMapper;
 import com.hsc.mapper.BoardMapper;
+import com.hsc.mapper.BoardViewMapper;
 import com.hsc.paging.PaginationInfo;
 import com.hsc.util.FileUtils;
 
@@ -26,6 +27,9 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardMapper boardMapper;
+	
+	@Autowired
+	private BoardViewMapper boardViewMapper;
 	
 	@Autowired
 	private AttachMapper attachMapper;
@@ -131,6 +135,24 @@ public class BoardServiceImpl implements BoardService {
 
 		return boardList;
 	}
+	
+	@Override
+	public List<BoardDTO> getBoardViewList(BoardDTO params) {
+		List<BoardDTO> boardList = Collections.emptyList();
+
+		int boardTotalCount = boardViewMapper.selectBoardTotalCount(params);
+		
+		PaginationInfo paginationInfo = new PaginationInfo(params);
+		paginationInfo.setTotalRecordCount(boardTotalCount);
+        
+		params.setPaginationInfo(paginationInfo);
+		
+		if (boardTotalCount > 0) {
+			boardList = boardViewMapper.selectBoardList(params);
+		}
+
+		return boardList;
+	}	
 	
 	@Override
 	public List<AttachDTO> getAttachFileList(Long boardIdx) {

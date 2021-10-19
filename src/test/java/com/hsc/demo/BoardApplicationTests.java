@@ -19,6 +19,15 @@ class BoardApplicationTests {
 	void contextLoads() {
 	}
 	
+	
+	@Test
+	public void testGetversion() {
+		
+		String version = org.springframework.core.SpringVersion.getVersion();
+		System.out.println("version : "+version);
+		
+	}
+	
 	@Test
 	public void testByApplicationContext() {
 		try {
