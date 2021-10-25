@@ -2,7 +2,7 @@ var idleTime = 0;
 
 $(document).ready(function () {
     //Increment the idle time counter every minute.
-    var idleInterval = setInterval(timerIncrement, 30000); // 30sec
+    var idleInterval = setInterval(timerIncrement, 60000); // 60sec
 
     //Zero the idle timer on mouse movement.
     //$(this).mousemove(function (e) {

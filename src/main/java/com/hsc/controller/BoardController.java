@@ -205,11 +205,11 @@ public class BoardController extends UiUtils{
 		return "board/landmark";
 	}
 	
-	@GetMapping(value = "/board/gcc.do")
-	public String openGcc(@RequestParam(value = "lang", required = false) String lang, Model model) {
-		model.addAttribute("lang", lang);
-		return "board/gcc";
-	}
+//	@GetMapping(value = "/board/gcc.do")
+//	public String openGcc(@RequestParam(value = "lang", required = false) String lang, Model model) {
+//		model.addAttribute("lang", lang);
+//		return "board/gcc";
+//	}
 	
 	@GetMapping(value = "/board/food_kr.do")
 	public String openKrFoodBoardList(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "lang", required = false) String lang, Model model) {
@@ -292,8 +292,9 @@ public class BoardController extends UiUtils{
 	}
 	
 	@GetMapping(value = "/board/k_airport.do")
-	public String openKairport(@RequestParam(value = "lang", required = false) String lang, Model model) {
+	public String openKairport(@RequestParam(value = "lang", required = false) String lang, @RequestParam(value = "airport", required = false) String airport, Model model) {
 		model.addAttribute("lang", lang);
+		model.addAttribute("airport", airport);
 		return "board/k_airport";
 	}
 	
