@@ -11,9 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -138,9 +140,23 @@ public class BoardController extends UiUtils{
 		return "board/list";
 	}
 	
+	@GetMapping(value = "/board/list_event.do")
+	public String openBoardList2(@ModelAttribute("params") BoardDTO params, Model model) {
+		List<BoardDTO> boardList = boardService.getBoardList(params);
+	    model.addAttribute("boardList", boardList);
+
+		return "board/list_event";
+	}
+	
 	@GetMapping(value = "/board/index.do")
-	public String openViewBoardList(@ModelAttribute("params") BoardDTO params, @RequestParam(value = "lang", required = false) String lang, Model model) {
+	public String openViewBoardList(@ModelAttribute("params") BoardDTO params, 
+			@RequestParam(value = "lang", required = false) String lang, 
+			@RequestParam(value = "kiosk", required = false) String kiosk,
+			HttpSession session,
+			Model model) {
 		//추후 기간내 검색 추가
+		session.setAttribute("kiosk", kiosk);
+		session.setMaxInactiveInterval(24*60*60);
 		List<BoardDTO> boardList = boardService.getBoardViewList(params);
 	    model.addAttribute("boardList", boardList);
 	    model.addAttribute("lang", lang);
@@ -334,6 +350,7 @@ public class BoardController extends UiUtils{
 		}
 
 		TouritemDTO tourItem = tourService.getTourItemDetail(idx);
+		
 		if (tourItem == null || "Y".equals(tourItem.getDeleteYn())) {
 			return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
 		}
@@ -351,6 +368,7 @@ public class BoardController extends UiUtils{
 		}
 
 		TouritemDTO tourItem = tourService.getTourItemDetail(idx);
+		tourService.registerHit(tourItem);
 		if (tourItem == null || "Y".equals(tourItem.getDeleteYn())) {
 			return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/todo_sel_history.do", Method.GET, null, model);
 		}
@@ -368,6 +386,7 @@ public class BoardController extends UiUtils{
 		}
 
 		TouritemDTO tourItem = tourService.getTourItemDetail(idx);
+		tourService.registerHit(tourItem);
 		if (tourItem == null || "Y".equals(tourItem.getDeleteYn())) {
 			return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/todo_sel_history.do", Method.GET, null, model);
 		}
@@ -486,6 +505,15 @@ public class BoardController extends UiUtils{
 	@GetMapping(value = "/board/testImage.do")
 	public String openImage(@ModelAttribute("params") String params, Model model) {
 		return "board/testImage";
+	}
+	
+	@GetMapping(value = "/board/dashboard.do")
+	public String openDashboard() {
+		return "board/dashboard";
+	}
+	@GetMapping(value = "/board/unknown.do")
+	public String openunKnown() {
+		return "board/404";
 	}
 		
 }

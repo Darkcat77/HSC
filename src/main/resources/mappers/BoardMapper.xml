@@ -3,19 +3,28 @@
 <mapper namespace="com.hsc.mapper.BoardMapper">
 
     <sql id="boardColumns">
-             idx
-           , eType
-           , evtNm
-           , stDate
-           , edDate
-           , contents
-           , place
-           , orgImg
-           , savImg
-           , deleteYn
-           , useYn
-           , regDate
-           , uptDate
+            idx
+           ,eType
+           ,evtNm
+           ,enEvtNm
+           ,oranized
+           ,enOranized
+           ,stDate
+           ,edDate
+           ,place
+           ,enPlace
+           ,contents
+           ,enContents
+           ,eTime
+           ,enETime
+           ,evtFee
+           ,enEvtFee
+           ,orgImg
+           ,savImg
+           ,useYn
+           ,regDate
+           ,uptDate
+           ,deleteYn
     </sql>
     
     <!--<insert id="insertBoard" parameterType="BoardDTO">-->
@@ -26,16 +35,25 @@
         #{idx}
       , #{eType}  
       , #{evtNm}
+      , #{enEvtNm}
+      , #{oranized}
+      , #{enOranized}
       , #{stDate}
       , #{edDate}
-      , #{contents}
       , #{place}
+      , #{enPlace}
+      , #{contents}
+      , #{enContents}
+      , #{eTime}
+      , #{enEtime}
+      , #{evtFee}
+      , #{enEvtFee}
       , #{orgImg}
       , #{savImg}
-      , 'N'
-      , 'N'
-      , NOW()
-      , NULL 
+      , 'Y'
+      , Now()
+      , NULL
+      , 'N' 
       )
       
     </insert>
@@ -54,16 +72,25 @@
     <update id="updateBoard" parameterType="BoardDTO">
         UPDATE tbl_event
         SET
-            eType    = #{eType}
-          , evtNm    = #{evtNm}
-          , stDate   = #{stDate}
-          , edDate   = #{edDate}
-          , contents = #{contents}
-          , place    = #{place}
-          , orgimg   = #{orgimg}
-          , savimg   = #{savimg}
-          , useYn    = #{useYn}
-          , uptDate  = NOW()
+            eType      = #{eType}
+          , evtNm      = #{evtNm}
+          , enEvtNm    = #{enEvtNm}
+          , oranized   = #{oranized}
+          , enOranized = #{enOranized}
+          , stDate     = #{stDate}
+          , edDate     = #{edDate}
+          , place      = #{place}
+          , enPlace    = #{enPlace}
+          , contents   = #{contents}
+          , enContents = #{enContents}
+	      , eTime      = #{eTime}
+	      , enEtime    = #{enEtime}
+	      , evtFee     = #{evtFee}
+	      , enEvtFee   = #{enEvtFee}          
+          , orgimg     = #{orgimg}
+          , savimg     = #{savimg}
+          , useYn      = #{useYn}
+          , uptDate    = NOW()
         WHERE idx    = #{idx}
     </update>
     

@@ -15,8 +15,8 @@ $(document).ready(function () {
 
 function timerIncrement() {
     idleTime = idleTime + 1;
-    if (idleTime > 2 && goHome==1) { // 20 minutes
-        location.href="/board/index.do?lang="+lang;
+    if (idleTime > 2 && goHome==1) { // 2 minutes
+        location.href="/board/index.do?lang="+"kr"+"&kiosk="+kiosk;
     }
 }
 
