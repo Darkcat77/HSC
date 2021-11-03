@@ -76,7 +76,7 @@ public class BoardController extends UiUtils{
 	}
 	
 	@GetMapping(value = "/board/eventwrite.do")
-	public String openBoardEventWrite(@ModelAttribute("params") BoardDTO params, @RequestParam(value = "idx", required = false) Long idx, Model model) {
+	public String _openBoardEventWrite(@ModelAttribute("params") BoardDTO params, @RequestParam(value = "idx", required = false) Long idx, Model model) {
 		if (idx == null) {
 			model.addAttribute("board", new BoardDTO());
 		} else {
@@ -90,6 +90,24 @@ public class BoardController extends UiUtils{
 		}
 
 		return "board/eventwrite";
+	}
+	
+	@GetMapping(value = "/board/write_event.do")
+	public String openBoardEventWrite(@ModelAttribute("params") BoardDTO params, @RequestParam(value = "idx", required = false) Long idx, Model model) {
+		if (idx == null) {
+			model.addAttribute("board", new BoardDTO());
+		} else {
+			BoardDTO board = boardService.getBoardDetail(idx);
+			
+			if (board == null || "Y".equals(board.getDeleteYn())) {
+				return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
+			}
+			model.addAttribute("board", board);
+			model.addAttribute("page", "event");
+
+		}
+
+		return "board/write_event";
 	}
 	
 	@PostMapping(value = "/board/register.do")
@@ -116,20 +134,20 @@ public class BoardController extends UiUtils{
 	@PostMapping(value = "/board/registerevent.do")
 	public String registerEventBoard(final BoardDTO params, final MultipartFile[] files, Model model) { //파일처리 추가
 		Map<String, Object> pagingParams = getPagingParams(params);
+		model.addAttribute("page", "event");
 		try {
 			boolean isRegistered = boardService.registerEventBoard(params, files); //파일처리 추가
 			if (isRegistered == false) {
-				return showMessageWithRedirect("게시글 등록에 실패하였습니다.", "/board/list.do", Method.GET, pagingParams, model);
+				return showMessageWithRedirect("게시글 등록에 실패하였습니다.", "/board/list_event.do", Method.GET, pagingParams, model);
 			}
 		} catch (DataAccessException e) {
-			return showMessageWithRedirect("데이터베이스 처리 과정에 문제가 발생하였습니다.", "/board/list.do", Method.GET, pagingParams, model);
+			return showMessageWithRedirect("데이터베이스 처리 과정에 문제가 발생하였습니다.", "/board/list_event.do", Method.GET, pagingParams, model);
     
 		} catch (Exception e) {
-			return showMessageWithRedirect("시스템에 문제가 발생하였습니다.", "/board/list.do", Method.GET, pagingParams, model);
+			return showMessageWithRedirect("시스템에 문제가 발생하였습니다.", "/board/list_event.do", Method.GET, pagingParams, model);
 		}
         
-		return showMessageWithRedirect("게시글 등록이 완료되었습니다.", "/board/list.do", Method.GET, pagingParams, model);
-		//return "redirect:/board/list.do";
+		return showMessageWithRedirect("게시글 등록이 완료되었습니다.", "/board/list_event.do", Method.GET, pagingParams, model);
 	}
 	
 	@GetMapping(value = "/board/list.do")
@@ -144,6 +162,7 @@ public class BoardController extends UiUtils{
 	public String openBoardList2(@ModelAttribute("params") BoardDTO params, Model model) {
 		List<BoardDTO> boardList = boardService.getBoardList(params);
 	    model.addAttribute("boardList", boardList);
+	    model.addAttribute("page", "event");
 
 		return "board/list_event";
 	}
@@ -173,6 +192,17 @@ public class BoardController extends UiUtils{
 
 		return "board/todo_sel_history";
 	}
+
+	@GetMapping(value = "/board/admin_history.do")
+	public String openAdminTourBoardList(@ModelAttribute("params") TouritemDTO params, Model model) {
+		params.setCType("T");
+		params.setCategory(Long.valueOf(0));
+		List<TouritemDTO> tourList = tourService.getTourViewList(params);
+	    model.addAttribute("tourList", tourList);
+	    model.addAttribute("page", "history");
+
+		return "board/list_tour";
+	}	
 	
 	
 	@GetMapping(value = "/board/todo_sel_museum.do")
@@ -327,7 +357,7 @@ public class BoardController extends UiUtils{
 	}
 	
 	@GetMapping(value = "/board/eventview.do")
-	public String openEventBoardDetail(@ModelAttribute("params") BoardDTO params, @RequestParam(value = "idx", required = false) Long idx, Model model) {
+	public String _openEventBoardDetail(@ModelAttribute("params") BoardDTO params, @RequestParam(value = "idx", required = false) Long idx, Model model) {
 		if (idx == null) {
 			return showMessageWithRedirect("올바르지 않은 접근입니다.", "/board/list.do", Method.GET, null, model);
 		}
@@ -340,6 +370,23 @@ public class BoardController extends UiUtils{
 		
 		
 		return "board/eventview";
+	}
+	
+	@GetMapping(value = "/board/view_event.do")
+	public String openEventBoardDetail(@ModelAttribute("params") BoardDTO params, @RequestParam(value = "idx", required = false) Long idx, Model model) {
+		if (idx == null) {
+			return showMessageWithRedirect("올바르지 않은 접근입니다.", "/board/list.do", Method.GET, null, model);
+		}
+
+		BoardDTO board = boardService.getBoardDetail(idx);
+		if (board == null || "Y".equals(board.getDeleteYn())) {
+			return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
+		}
+		model.addAttribute("board", board);
+		model.addAttribute("page", "event");
+		
+		
+		return "board/view_event";
 	}
 	
 	

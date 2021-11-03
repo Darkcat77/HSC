@@ -15,8 +15,8 @@
            ,enPlace
            ,contents
            ,enContents
-           ,eTime
-           ,enETime
+           ,evtTime
+           ,enEvtTime
            ,evtFee
            ,enEvtFee
            ,orgImg
@@ -44,8 +44,8 @@
       , #{enPlace}
       , #{contents}
       , #{enContents}
-      , #{eTime}
-      , #{enEtime}
+      , #{evtTime}
+      , #{enEvtTime}
       , #{evtFee}
       , #{enEvtFee}
       , #{orgImg}
@@ -72,25 +72,25 @@
     <update id="updateBoard" parameterType="BoardDTO">
         UPDATE tbl_event
         SET
-            eType      = #{eType}
-          , evtNm      = #{evtNm}
-          , enEvtNm    = #{enEvtNm}
-          , oranized   = #{oranized}
-          , enOranized = #{enOranized}
-          , stDate     = #{stDate}
-          , edDate     = #{edDate}
-          , place      = #{place}
-          , enPlace    = #{enPlace}
-          , contents   = #{contents}
-          , enContents = #{enContents}
-	      , eTime      = #{eTime}
-	      , enEtime    = #{enEtime}
-	      , evtFee     = #{evtFee}
-	      , enEvtFee   = #{enEvtFee}          
-          , orgimg     = #{orgimg}
-          , savimg     = #{savimg}
-          , useYn      = #{useYn}
-          , uptDate    = NOW()
+            eType        = #{eType}
+          , evtNm        = #{evtNm}
+          , enEvtNm      = #{enEvtNm}
+          , oranized     = #{oranized}
+          , enOranized   = #{enOranized}
+          , stDate       = #{stDate}
+          , edDate       = #{edDate}
+          , place        = #{place}
+          , enPlace      = #{enPlace}
+          , contents     = #{contents}
+          , enContents   = #{enContents}
+	      , evtTime      = #{evtTime}
+	      , enEvtTime    = #{enEvtTime}
+	      , evtFee       = #{evtFee}
+	      , enEvtFee     = #{enEvtFee}          
+          , orgImg       = #{orgImg}
+          , savImg       = #{savImg}
+          , useYn        = #{useYn} 
+          , uptDate      = NOW()
         WHERE idx    = #{idx}
     </update>
     

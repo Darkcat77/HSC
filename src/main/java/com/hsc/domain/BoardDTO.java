@@ -34,9 +34,9 @@ public class BoardDTO extends CommonDTO {
 	/** 장소 (영문)*/
 	private String enPlace;
 	/** 관람시간*/
-	private String etime;
+	private String evtTime;
 	/** 관람시간(영문)*/
-	private String enEtime;
+	private String enEvtTime;
 	/** 관람료*/
 	private String evtFee;
 	/** 관람료(영문)*/
