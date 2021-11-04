@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +30,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.hsc.adapter.GsonLocalDateTimeAdapter;
 import com.hsc.constant.Method;
 import com.hsc.domain.AttachDTO;
 import com.hsc.domain.BoardDTO;
+import com.hsc.domain.CommentDTO;
 import com.hsc.domain.TouritemDTO;
 import com.hsc.service.BoardService;
 import com.hsc.service.TourService;
@@ -193,18 +202,6 @@ public class BoardController extends UiUtils{
 		return "board/todo_sel_history";
 	}
 
-	@GetMapping(value = "/board/admin_history.do")
-	public String openAdminTourBoardList(@ModelAttribute("params") TouritemDTO params, Model model) {
-		params.setCType("T");
-		params.setCategory(Long.valueOf(0));
-		List<TouritemDTO> tourList = tourService.getTourViewList(params);
-	    model.addAttribute("tourList", tourList);
-	    model.addAttribute("page", "history");
-
-		return "board/list_tour";
-	}	
-	
-	
 	@GetMapping(value = "/board/todo_sel_museum.do")
 	public String openMuseumBoardList(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "lang", required = false) String lang, Model model) {
 		params.setCType("M");
@@ -465,6 +462,76 @@ public class BoardController extends UiUtils{
 		return showMessageWithRedirect("게시글 삭제가 완료되었습니다.", "/board/list.do", Method.GET, pagingParams, model);
 	}
 	
+	@GetMapping(value = "/board/admintourinfo.do")
+	public String openAdminHistoryBoardList(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "page", required = true) String page, Model model) {
+		
+		if (page.toString().equals("history")) {
+			params.setCType("T");
+			params.setCategory(Long.valueOf(0));
+			model.addAttribute("cat_type", "T");
+			model.addAttribute("category", 0);
+			model.addAttribute("page", "tour");			
+		} else if (page.toString().equals("museum")) {
+			params.setCType("M");
+			params.setCategory(Long.valueOf(0));
+			model.addAttribute("cat_type", "M");
+			model.addAttribute("category", 0);
+			model.addAttribute("page", "tour");
+		} else if (page.toString().equals("park")) {
+			params.setCType("P");
+			params.setCategory(Long.valueOf(0));
+			model.addAttribute("cat_type", "P");
+			model.addAttribute("category", 0);
+			model.addAttribute("page", "tour");			
+		} else if (page.toString().equals("show")) {
+			params.setCType("E");
+			params.setCategory(Long.valueOf(0));
+			model.addAttribute("cat_type", "E");
+			model.addAttribute("category", 0);
+			model.addAttribute("page", "tour");
+			
+		} else if (page.toString().equals("food_kr")) {
+			params.setCType("F");
+			params.setCategory(Long.valueOf(1));
+			model.addAttribute("cat_type", "F");
+			model.addAttribute("category", 1);
+			model.addAttribute("page", "food");
+			
+		} else if (page.toString().equals("food_ch")) {
+			params.setCType("F");
+			params.setCategory(Long.valueOf(2));
+			model.addAttribute("cat_type", "F");
+			model.addAttribute("category", 2);
+			model.addAttribute("page", "food");				
+		} else if (page.toString().equals("food_jp")) {
+			params.setCType("F");
+			params.setCategory(Long.valueOf(3));
+			model.addAttribute("cat_type", "F");
+			model.addAttribute("category", 3);
+			model.addAttribute("page", "food");				
+		} else if (page.toString().equals("food_ws")) {
+			params.setCType("F");
+			params.setCategory(Long.valueOf(4));
+			model.addAttribute("cat_type", "F");
+			model.addAttribute("category", 4);
+			model.addAttribute("page", "food");				
+		} else if (page.toString().equals("food_ds")) {
+			params.setCType("F");
+			params.setCategory(Long.valueOf(5));
+			model.addAttribute("cat_type", "F");
+			model.addAttribute("category", 5);
+			model.addAttribute("page", "food");				
+		}
+		
+		
+		List<TouritemDTO> tourList = tourService.getTourItemList(params);
+	    model.addAttribute("tourList", tourList);
+	    model.addAttribute("reqpage", page);	
+	    
+
+		return "board/list_tour";
+	}
+	
 	@GetMapping("/board/download.do")
 	public void downloadAttachFile(@RequestParam(value = "idx", required = false) final Long idx, Model model, HttpServletResponse response) {
 
@@ -562,5 +629,7 @@ public class BoardController extends UiUtils{
 	public String openunKnown() {
 		return "board/404";
 	}
+	
+
 		
 }
