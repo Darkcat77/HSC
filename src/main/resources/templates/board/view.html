@@ -143,8 +143,7 @@
 
 				if (confirm(idx + "번 게시글을 삭제할까요?")) {
 					var uri = /*[[ @{/board/delete.do} ]]*/ null;
-					var html = "";
-
+					alert(queryString);
 					html += '<form name="dataForm" action="'+uri+'" method="post">';
 		            html += '<input type="hidden" name="idx" value="'+idx+'" />';
 
