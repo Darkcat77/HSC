@@ -8,7 +8,7 @@
 		<div class="card-content">
 			<!-- <form class="form-horizontal" th:action="@{/board/register.do}" th:object="${board}" method="post" onsubmit="return registerBoard(this)"> -->
 			<!-- 파일첨부기능 추가 -->
-			<form class="form-horizontal" th:action="@{/board/register.do}" th:object="${board}" method="post" enctype="multipart/form-data" onsubmit="return registerBoard(this)">
+			<form class="form-horizontal" th:action="@{/admin/register.do}" th:object="${board}" method="post" enctype="multipart/form-data" onsubmit="return registerBoard(this)">
 
 				<!--/* update의 경우 서버로 전달할 게시글 번호 (PK) */-->
 				<input type="hidden" th:if="*{idx != null and idx > 0}" th:field="*{idx}" />
@@ -94,7 +94,7 @@
 				<!-- 파일 처리 추가 -->
 				<!-- <div class="btn_wrap text-center" th:object="${params}"> -->
 				<div id="btnDiv" class="btn_wrap text-center" th:object="${params}">
-	                <a th:href="|@{/board/list.do}*{makeQueryString(currentPageNo)}|" class="btn btn-default waves-effect waves-light">뒤로가기</a>
+	                <a th:href="|@{/admin/list.do}*{makeQueryString(currentPageNo)}|" class="btn btn-default waves-effect waves-light">뒤로가기</a>
 	                <button type="submit" class="btn btn-primary waves-effect waves-light">저장하기</button>
                 </div>
 			</form>

@@ -30,7 +30,7 @@
 						<!-- <td th:text="${row.eType}"></td> -->
 						
 						<td class="text-left">
-							<a th:href="|@{/board/eventview.do}${params.makeQueryString(params.currentPageNo)}&idx=${row.idx}|" th:text="${row.evtNm}"></a>
+							<a th:href="|@{/admin/eventview.do}${params.makeQueryString(params.currentPageNo)}&idx=${row.idx}|" th:text="${row.evtNm}"></a>
 						</td>
 						<td th:text="${row.place}"></td>
 						<td th:text="${#temporals.format( row.regDate, 'yyyy-MM-dd' )}"></td>
@@ -53,7 +53,7 @@
 			</table>
 
 			<div class="btn_wrap text-right">
-				<a th:href="@{/board/eventwrite.do}" class="btn btn-primary waves-effect waves-light">Write</a>
+				<a th:href="@{/admin/eventwrite.do}" class="btn btn-primary waves-effect waves-light">Write</a>
 			</div>
               
 			<th:block layout:fragment="paging">
