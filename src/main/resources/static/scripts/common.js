@@ -79,3 +79,60 @@ function isValid(field, fieldName, focusField) {
 function nvl(value1, value2) {
 	return (isEmpty(value1) == false ? value1 : value2);
 }
+
+
+/**
+ * 쿠키관련
+
+ */
+function setCookie(cookie_name, value, days) {
+	var exdate = new Date();
+	exdate.setDate(exdate.getDate() + days);
+	// 설정 일수만큼 현재시간에 만료값으로 지정
+
+	var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+	document.cookie = cookie_name + '=' + cookie_value;
+}
+
+function getCookie(cookie_name) {
+	var x, y;
+	var val = document.cookie.split(';');
+
+	for (var i = 0; i < val.length; i++) {
+		x = val[i].substr(0, val[i].indexOf('='));
+		y = val[i].substr(val[i].indexOf('=') + 1);
+		x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+		if (x == cookie_name) {
+	    	return unescape(y); // unescape로 디코딩 후 값 리턴
+		}
+	}
+}
+
+/**
+ * <br> 엔터 치환
+
+ */
+function replaceBrTag(str){
+	if (str == undefined || str == null)
+	{
+	    return "";
+	}
+	
+	str = str.replace(/\r\n/ig, '<br>');
+	str = str.replace(/\\n/ig, '<br>');
+	str = str.replace(/\n/ig, '<br>');
+	return str;
+}
+
+function unreplaceBrTag(str){
+    if (str == undefined || str == null)
+    {
+        return "";
+    }
+
+    str = str.replace(/<br>/ig, '\n');
+    str = str.replace(/<\/br>/ig, '\n');
+    str = str.replace(/<br \/>/ig, '\n');
+    return str;
+}
+
