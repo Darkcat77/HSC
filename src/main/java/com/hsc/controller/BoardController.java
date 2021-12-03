@@ -55,8 +55,8 @@ public class BoardController extends UiUtils{
 			HttpSession session,
 			Model model) {
 		//추후 기간내 검색 추가
-		session.setAttribute("kiosk", kiosk);
-		session.setMaxInactiveInterval(24*60*60);
+		session.setAttribute("kiosk", kiosk.toUpperCase());
+		session.setMaxInactiveInterval(-1);
 		List<BoardDTO> boardList = boardService.getBoardViewList(params);
 	    model.addAttribute("boardList", boardList);
 	    model.addAttribute("lang", lang);
@@ -214,13 +214,15 @@ public class BoardController extends UiUtils{
 	
 	@GetMapping(value = "/board/todo_detail.do")
 	public String openTourViewItemDetail(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "idx", required = false) Long idx, 
-			@RequestParam(value = "lang", required = false) String lang, Model model) {
+			@RequestParam(value = "lang", required = false) String lang, 
+			HttpSession session,
+			Model model) {
 		if (idx == null) {
 			return showMessageWithRedirect("올바르지 않은 접근입니다.", "/board/todo_sel_history.do", Method.GET, null, model);
 		}
 
 		TouritemDTO tourItem = tourService.getTourItemDetail(idx);
-		tourService.registerHit(tourItem);
+		tourService.registerHit(tourItem, session.getAttribute("kiosk").toString());
 		if (tourItem == null || "Y".equals(tourItem.getDeleteYn())) {
 			return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/todo_sel_history.do", Method.GET, null, model);
 		}
@@ -232,13 +234,15 @@ public class BoardController extends UiUtils{
 	
 	@GetMapping(value = "/board/todo_detail_food.do")
 	public String openFoodViewItemDetail(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "idx", required = false) Long idx, 
-			@RequestParam(value = "lang", required = false) String lang, Model model) {
+			@RequestParam(value = "lang", required = false) String lang,
+			HttpSession session,
+			Model model) {
 		if (idx == null) {
 			return showMessageWithRedirect("올바르지 않은 접근입니다.", "/board/todo_sel_history.do", Method.GET, null, model);
 		}
 
 		TouritemDTO tourItem = tourService.getTourItemDetail(idx);
-		tourService.registerHit(tourItem);
+		tourService.registerHit(tourItem, session.getAttribute("kiosk").toString());
 		if (tourItem == null || "Y".equals(tourItem.getDeleteYn())) {
 			return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/todo_sel_history.do", Method.GET, null, model);
 		}
