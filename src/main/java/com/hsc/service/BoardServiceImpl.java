@@ -87,6 +87,10 @@ public class BoardServiceImpl implements BoardService {
 				for(AttachDTO attachDTO : fileList) {
 					if (params.getOrgImg().toString().equals(attachDTO.getOriginalName().toString())){
 						params.setSavImg(attachDTO.getSaveName());
+					} else if (params.getOrgQrImg().toString().equals(attachDTO.getOriginalName().toString())){
+						params.setSavQrImg(attachDTO.getSaveName());
+					} else if (params.getOrgEnQrImg().toString().equals(attachDTO.getOriginalName().toString())){
+						params.setSavEnQrImg(attachDTO.getSaveName());
 					}
 				}			
 			}

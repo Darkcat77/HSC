@@ -45,6 +45,14 @@ public class BoardDTO extends CommonDTO {
 	private String orgImg;
 	/** 저장 이미지 */
 	private String savImg;
+	/** 원본 Qr 이미지 */
+	private String orgQrImg;
+	/** 저장 Qr 이미지 */
+	private String savQrImg;
+	/** 원본 영문Qr 이미지 */
+	private String orgEnQrImg;
+	/** 저장 영문Qr 이미지 */
+	private String savEnQrImg;
 	/** 파일 변경 여부 */
 	private String changeYn;
 	/** 파일 인덱스 리스트 */

@@ -21,6 +21,10 @@
            ,enEvtFee
            ,orgImg
            ,savImg
+           ,orgQrImg
+           ,savQrImg
+           ,orgEnQrImg
+           ,savEnQrImg
            ,useYn
            ,regDate
            ,uptDate
@@ -50,6 +54,10 @@
       , #{enEvtFee}
       , #{orgImg}
       , #{savImg}
+      , #{orgQrImg}
+      , #{savQrImg}
+      , #{orgEnQrImg}
+      , #{savEnQrImg}
       , 'Y'
       , Now()
       , NULL
@@ -89,6 +97,10 @@
 	      , enEvtFee     = #{enEvtFee}          
           , orgImg       = #{orgImg}
           , savImg       = #{savImg}
+          , orgQrImg     = #{orgQrImg}
+          , savQrImg     = #{savQrImg}
+          , orgEnQrImg   = #{orgEnQrImg}
+          , savEnQrImg   = #{savEnQrImg}
           , useYn        = #{useYn} 
           , uptDate      = NOW()
         WHERE idx    = #{idx}
