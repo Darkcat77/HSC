@@ -115,9 +115,17 @@ public class BoardController extends UiUtils{
 	}
 	
 	@GetMapping(value = "/board/landmark.do")
-	public String openLandmark(@RequestParam(value = "lang", required = false) String lang, Model model) {
+	public String openLandmark(@RequestParam(value = "lang", required = false) String lang, 
+			HttpSession session,
+			Model model) {
 		model.addAttribute("lang", lang);
-		return "board/landmark";
+		
+		if (session.getAttribute("kiosk").toString().equals("SONOCALM")) {
+			return "board/landmark2";
+		} else {
+		
+			return "board/landmark";
+		}
 	}
 	
 //	@GetMapping(value = "/board/gcc.do")
@@ -127,9 +135,13 @@ public class BoardController extends UiUtils{
 //	}
 	
 	@GetMapping(value = "/board/food_kr.do")
-	public String openKrFoodBoardList(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "lang", required = false) String lang, Model model) {
+	public String openKrFoodBoardList(@ModelAttribute("params") TouritemDTO params, 
+			@RequestParam(value = "lang", required = false) String lang,
+			HttpSession session,
+			Model model) {
 		params.setCType("F");
 		params.setCategory(Long.valueOf(1));
+		params.setTerminalId(session.getAttribute("kiosk").toString());
 		List<TouritemDTO> tourList = tourService.getTourViewList(params);
 	    model.addAttribute("tourList", tourList);
 	    model.addAttribute("lang", lang);
@@ -138,9 +150,13 @@ public class BoardController extends UiUtils{
 	}
 	
 	@GetMapping(value = "/board/food_ch.do")
-	public String openChFoodBoardList(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "lang", required = false) String lang, Model model) {
+	public String openChFoodBoardList(@ModelAttribute("params") TouritemDTO params, 
+			@RequestParam(value = "lang", required = false) String lang,
+			HttpSession session,
+			Model model) {
 		params.setCType("F");
 		params.setCategory(Long.valueOf(2));
+		params.setTerminalId(session.getAttribute("kiosk").toString());
 		List<TouritemDTO> tourList = tourService.getTourViewList(params);
 	    model.addAttribute("tourList", tourList);
 	    model.addAttribute("lang", lang);
@@ -149,9 +165,13 @@ public class BoardController extends UiUtils{
 	}
 	
 	@GetMapping(value = "/board/food_jp.do")
-	public String openJpFoodBoardList(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "lang", required = false) String lang, Model model) {
+	public String openJpFoodBoardList(@ModelAttribute("params") TouritemDTO params, 
+			@RequestParam(value = "lang", required = false) String lang,
+			HttpSession session,
+			Model model) {
 		params.setCType("F");
 		params.setCategory(Long.valueOf(3));
+		params.setTerminalId(session.getAttribute("kiosk").toString());
 		List<TouritemDTO> tourList = tourService.getTourViewList(params);
 	    model.addAttribute("tourList", tourList);
 	    model.addAttribute("lang", lang);
@@ -160,9 +180,13 @@ public class BoardController extends UiUtils{
 	}
 	
 	@GetMapping(value = "/board/food_ws.do")
-	public String openWsFoodBoardList(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "lang", required = false) String lang, Model model) {
+	public String openWsFoodBoardList(@ModelAttribute("params") TouritemDTO params, 
+			@RequestParam(value = "lang", required = false) String lang,
+			HttpSession session,
+			Model model) {
 		params.setCType("F");
 		params.setCategory(Long.valueOf(4));
+		params.setTerminalId(session.getAttribute("kiosk").toString());
 		List<TouritemDTO> tourList = tourService.getTourViewList(params);
 	    model.addAttribute("tourList", tourList);
 	    model.addAttribute("lang", lang);
@@ -171,9 +195,13 @@ public class BoardController extends UiUtils{
 	}
 	
 	@GetMapping(value = "/board/food_dessert.do")
-	public String openDessertFoodBoardList(@ModelAttribute("params") TouritemDTO params, @RequestParam(value = "lang", required = false) String lang, Model model) {
+	public String openDessertFoodBoardList(@ModelAttribute("params") TouritemDTO params,
+			@RequestParam(value = "lang", required = false) String lang, 
+			HttpSession session,
+			Model model) {
 		params.setCType("F");
 		params.setCategory(Long.valueOf(5));
+		params.setTerminalId(session.getAttribute("kiosk").toString());
 		List<TouritemDTO> tourList = tourService.getTourViewList(params);
 	    model.addAttribute("tourList", tourList);
 	    model.addAttribute("lang", lang);
